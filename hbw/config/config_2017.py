@@ -45,7 +45,6 @@ cfg.add_process(procs.n.dy_lep)
 # cfg.add_process(procs.n.qcd)
 # cfg.add_process(procs.n.ttv)
 # cfg.add_process(procs.n.vv)
-# cfg.add_process(procs.n.vv)
 cfg.add_process(procs.n.ggHH_kl_0_kt_1_sl_hbbhww)
 cfg.add_process(procs.n.ggHH_kl_1_kt_1_sl_hbbhww)
 cfg.add_process(procs.n.ggHH_kl_2p45_kt_1_sl_hbbhww)
@@ -70,10 +69,17 @@ colors = {
     "ttV": "#a65628",  # brown
     "VV": "#f781bf",  # pink
     "other": "#999999",  # grey
-    "ggHH_kl_1_kt_1_sl_hbbhww": "#000000",  # black
+    "ggHH_kl_1_kt_1_sl_hbbhww": "#a65628",  # brown
     "ggHH_kl_0_kt_1_sl_hbbhww": "#1b9e77",  # green2
     "ggHH_kl_2p45_kt_1_sl_hbbhww": "#d95f02",  # orange2
     "ggHH_kl_5_kt_1_sl_hbbhww": "#e7298a",  # pink2
+    "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww": "#000000",  # black
+    "qqHH_CV_1_C2V_1_kl_0_sl_hbbhww": "#e41a1c",  # red
+    "qqHH_CV_1_C2V_1_kl_2_sl_hbbhww": "#377eb8", #blue
+    "qqHH_CV_1_C2V_0_kl_1_sl_hbbhww": "#4daf4a",  # green
+    "qqHH_CV_1_C2V_2_kl_1_sl_hbbhww": "#984ea3",  # purple
+    "qqHH_CV_0p5_C2V_1_kl_1_sl_hbbhww": "#ff7f00",  # orange
+    "qqHH_CV_1p5_C2V_1_kl_1_sl_hbbhww": "#ffff33",  # yellow
 }
 for proc, color in colors.items():
     if proc in cfg.processes:
@@ -95,23 +101,23 @@ dataset_names = [
     # TTbar
     "tt_sl_powheg",
     "tt_dl_powheg",
-    "tt_fh_powheg",
+    # "tt_fh_powheg",
     # SingleTop
     "st_tchannel_t_powheg",
     "st_tchannel_tbar_powheg",
     "st_twchannel_t_powheg",
-    "st_twchannel_tbar_powheg",
+    #"st_twchannel_tbar_powheg",
     "st_schannel_lep_amcatnlo",
-    "st_schannel_had_amcatnlo",
+    # "st_schannel_had_amcatnlo",
     # WJets (TODO: fix wjet datasets)
     "w_lnu_ht70To100_madgraph",
     "w_lnu_ht100To200_madgraph",
     "w_lnu_ht200To400_madgraph",
     "w_lnu_ht400To600_madgraph",
     "w_lnu_ht600To800_madgraph",
-    "w_lnu_ht800To1200_madgraph",
+    #"w_lnu_ht800To1200_madgraph",
     "w_lnu_ht1200To2500_madgraph",
-    "w_lnu_ht2500_madgraph",
+    #"w_lnu_ht2500_madgraph",
     # DY
     "dy_lep_m50_ht70to100_madgraph",
     "dy_lep_m50_ht100to200_madgraph",
@@ -151,7 +157,6 @@ for dataset_name in dataset_names:
         dataset.x.has_top = True
     if dataset.name.startswith("tt"):
         dataset.x.is_ttbar = True
-        dataset.x.event_weights = ["top_pt_weight"]
     if "HH" in dataset.name and "hbbhww" in dataset.name:
         dataset.x.is_hbw = True
 
@@ -163,19 +168,22 @@ cfg.set_aux("default_producer", "features")
 cfg.set_aux("default_ml_model", None)
 cfg.set_aux("default_inference_model", "default")
 cfg.set_aux("default_categories", ["incl"])
-cfg.set_aux("default_process_settings", [["ggHH_kl_1_kt_1_sl_hbbhww", "scale=2000", "unstack"]])
+cfg.set_aux("default_process_settings", [["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "scale=2000", "unstack"]])
 
 # process groups for conveniently looping over certain processs
 # (used in wrapper_factory and during plotting)
 cfg.set_aux("process_groups", {
-    "hh": ["ggHH_kl_1_kt_1_sl_hbbhww"],
-    "default": ["ggHH_kl_1_kt_1_sl_hbbhww", "dy_lep", "w_lnu", "st", "tt"],
-    "working": ["ggHH_kl_1_kt_1_sl_hbbhww", "dy_lep", "st", "tt"],
-    "test": ["ggHH_kl_1_kt_1_sl_hbbhww", "tt_sl"],
-    "small": ["ggHH_kl_1_kt_1_sl_hbbhww", "st", "tt"],
-    "signal": ["ggHH_kl_0_kt_1_sl_hbbhww", "ggHH_kl_1_kt_1_sl_hbbhww",
-               "ggHH_kl_2p45_kt_1_sl_hbbhww", "ggHH_kl_5_kt_1_sl_hbbhww"],
+    "hh": ["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww"],
+    "default": ["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "dy_lep", "w_lnu", "st", "tt", "ggHH_kl_1_kt_1_sl_hbbhww"],
+    "working": ["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "dy_lep", "st", "tt"],
+    "test": ["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "tt_sl"],
+    "small": ["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "st", "tt"],
+    "signal": ["qqHH_*"],
+    "hhcomparison": ["ggHH_kl_1_kt_1_sl_hbbhww", "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww"], 
     "bkg": ["tt", "st", "w_lnu", "dy_lep"],
+    "signaltt": ["tt", "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww"],
+    "signalst": ["st", "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww"],
+    "main": ["tt", "ggHH_kl_1_kt_1_sl_hbbhww", "qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "tt_sl_powheg", "tt_dl_powheg"],
 })
 
 # dataset groups for conveniently looping over certain datasets
@@ -185,7 +193,7 @@ cfg.set_aux("dataset_groups", {
     "working": ["tt_*", "st_*", "dy_*"],
     "default": ["ggHH_*", "tt_*", "st_*", "dy_*", "w_lnu_*"],
     "tt": ["tt_*"], "st": ["st_*"], "w": ["w_lnu_*"], "dy": ["dy_*"],
-    "hh": ["ggHH_*"], "hhsm": ["ggHH_kl_1_kt_1_sl_hbbhww_powheg"],
+    "hh": ["qqHH_*"], "hhsm": ["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww_powheg"],
 })
 
 # category groups for conveniently looping over certain categories
@@ -212,9 +220,8 @@ cfg.set_aux("shift_groups", {
 # selector step groups for conveniently looping over certain steps
 # (used in cutflow tasks)
 cfg.set_aux("selector_step_groups", {
-    "default": ["Lepton", "VetoLepton", "Jet", "Bjet", "Trigger"],
-    "thesis": ["Lepton", "Jet", "Trigger", "Bjet"],  # reproduce master thesis cuts to check if everything works
-    "test": ["Lepton", "Jet", "Bjet"],
+    "default": ["Lepton", "Jet", "Trigger"],
+    "test": ["Lepton", "Jet"],
 })
 
 cfg.set_aux("selector_step_labels", {
@@ -226,8 +233,8 @@ cfg.set_aux("selector_step_labels", {
 
 # process settings groups to quickly define settings for ProcessPlots
 cfg.set_aux("process_settings_groups", {
-    "default": [["ggHH_kl_1_kt_1_sl_hbbhww", "scale=2000", "unstack"]],
-    "unstack_all": [[proc, "unstack"] for proc in cfg.processes],
+    "default": [["qqHH_CV_1_C2V_1_kl_1_sl_hbbhww", "scale=2000", "unstack"]],
+    "unstack_all": [[proc.name, "unstack"] for proc in cfg.processes],
 })
 
 # 2017 luminosity with values in inverse pb and uncertainties taken from
@@ -479,7 +486,7 @@ cfg.set_aux("keep_columns", DotDict.wrap({
         "mc_weight", "PV.npvs", "category_ids", "deterministic_seed",
     },
     "cf.MergeSelectionMasks": {
-        "mc_weight", "normalization_weight", "process_id", "category_ids", "cutflow.*",
+        "mc_weight", "normalization_weight", "process_id", "category_ids", "cutflow.*", "cf_*",
     },
 }))
 
